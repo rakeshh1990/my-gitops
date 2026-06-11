@@ -15,7 +15,7 @@ spec:
       values: |
         assistant:
           image:
-            repository: ghcr.io/rakeshh1990/my-ai-agent/assistant
+            repository: ghcr.io/rakeshh1990/my-ai-agent
             tag: latest
         ollama:
           model: qwen2.5-coder:7b

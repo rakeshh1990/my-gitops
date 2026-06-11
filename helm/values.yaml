@@ -57,7 +57,7 @@ assistant:
   replicaCount: 1
   
   image:
-    repository: ghcr.io/rakeshh1990/my-ai-agent/assistant  # Update with your repo
+    repository: ghcr.io/rakeshh1990/my-ai-agent  # Update with your repo
     tag: ad4d522
     pullPolicy: Always
   
