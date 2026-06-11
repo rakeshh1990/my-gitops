@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: helm-values-local
+  namespace: argocd
+data:
+  values.yaml: |
+    assistant:
+      image:
+        repository: ghcr.io/rakesh/code-agent/assistant  # Update with your repo
+        tag: latest
+        pullPolicy: Always
+      
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "100m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      
+      service:
+        type: ClusterIP
+        port: 3000
+    
+    ollama:
+      image:
+        tag: latest
+        pullPolicy: IfNotPresent
+      
+      resources:
+        requests:
+          memory: "4Gi"
+          cpu: "2"
+        limits:
+          memory: "6Gi"
+          cpu: "3"
+      
+      service:
+        type: ClusterIP
+        port: 11434
+      
+      persistence:
+        size: 5Gi
+        storageClass: standard
