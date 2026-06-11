@@ -23,7 +23,7 @@ ollama:
   
   image:
     repository: ollama/ollama
-    tag: latest
+    tag: 499a072
     pullPolicy: IfNotPresent
   
   service:
@@ -58,7 +58,7 @@ assistant:
   
   image:
     repository: ghcr.io/rakeshh1990/my-ai-agent/assistant  # Update with your repo
-    tag: latest
+    tag: 499a072
     pullPolicy: Always
   
   service:
