@@ -23,7 +23,7 @@ ollama:
   
   image:
     repository: ollama/ollama
-    tag: 6c02fbf
+    tag: latest
     pullPolicy: IfNotPresent
   
   service:
