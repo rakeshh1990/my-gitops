@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ollama-model-init
+
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+
+      containers:
+      - name: model-loader
+        image: ollama/ollama:latest
+        command:
+          - sh
+          - -c
+          - |
+            ollama serve &
+            sleep 15
+
+            ollama pull qwen2.5-coder:7b
+
+        volumeMounts:
+        - name: ollama-data
+          mountPath: /root/.ollama
+
+      volumes:
+      - name: ollama-data
+        persistentVolumeClaim:
+          claimName: ollama-pvc
