@@ -48,7 +48,7 @@ assistant:
   replicaCount: 1
   image:
     repository: ghcr.io/rakeshh1990/my-ai-agent # Update with your repo
-    tag: main-8073c66
+    tag: main-fa99152
     pullPolicy: Always
   service:
     type: ClusterIP
