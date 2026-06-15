@@ -14,6 +14,10 @@ workload:
 
   containerPort: 80
 
+  env: []
+
+  resources: {}
+
   service:
     enabled: true
     port: 80
@@ -28,6 +32,11 @@ workload:
     mountPath: ""
     storageClass: ""
     size: 5Gi
+
+configMap:
+  enabled: false
+
+  data: {}
 
 extraJob:
   enabled: false

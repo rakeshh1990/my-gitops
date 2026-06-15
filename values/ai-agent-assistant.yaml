@@ -7,10 +7,23 @@ workload:
 
   image:
     repository: ghcr.io/rakeshh1990/my-ai-agent
-    tag: latest
+    tag: main-fa99152
     pullPolicy: Always
 
   containerPort: 8501
+
+  # env:
+  #   - name: OLLAMA_BASE_URL
+  #     value: http://ollama:11434
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
   service:
     enabled: true
@@ -22,6 +35,12 @@ workload:
 
   persistence:
     enabled: false
+
+configMap:
+  enabled: true
+
+  data:
+    OLLAMA_BASE_URL: http://ollama:11434
 
 extraJob:
   enabled: false
