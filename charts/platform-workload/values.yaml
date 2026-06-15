@@ -1,0 +1,33 @@
+# charts/platform-workload/values.yaml
+
+namespace: default
+
+workload:
+  name: app
+
+  replicas: 1
+
+  image:
+    repository: nginx
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  containerPort: 80
+
+  service:
+    enabled: true
+    port: 80
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+    host: ""
+
+  persistence:
+    enabled: false
+    mountPath: ""
+    storageClass: ""
+    size: 5Gi
+
+extraJob:
+  enabled: false

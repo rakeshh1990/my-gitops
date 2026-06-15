@@ -1,0 +1,30 @@
+namespace: ai-agent
+
+workload:
+  name: ollama
+
+  replicas: 1
+
+  image:
+    repository: ollama/ollama
+    tag: latest
+
+  containerPort: 11434
+
+  service:
+    enabled: true
+    port: 11434
+
+  ingress:
+    enabled: true
+    host: ollama.local
+
+  persistence:
+    enabled: true
+
+    mountPath: /root/.ollama
+
+    size: 20Gi
+
+extraJob:
+  enabled: false

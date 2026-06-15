@@ -18,9 +18,9 @@
 !/*.xml
 !/argocd/
 !/helm/
+!/charts/
+!/values/
 !/apps/
-!/terraform/
-!/Makefile
 
 # Ignore all files in jobs subdirectories except for folders.
 # Note: git doesn't track folders, only file content.

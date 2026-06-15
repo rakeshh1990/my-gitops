@@ -1,0 +1,27 @@
+namespace: ai-agent
+
+workload:
+  name: assistant
+
+  replicas: 1
+
+  image:
+    repository: ghcr.io/rakeshh1990/my-ai-agent
+    tag: latest
+    pullPolicy: Always
+
+  containerPort: 8501
+
+  service:
+    enabled: true
+    port: 80
+
+  ingress:
+    enabled: true
+    host: assistant.local
+
+  persistence:
+    enabled: false
+
+extraJob:
+  enabled: false
