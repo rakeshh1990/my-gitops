@@ -11,6 +11,25 @@ workload:
 
   containerPort: 11434
 
+  initContainers:
+    - name: pull-model
+      image: ollama/ollama:latest
+      command:
+        - sh
+        - -c
+        - |
+          ollama serve &
+
+          until ollama list >/dev/null 2>&1; do
+            sleep 2
+          done
+
+          ollama show qwen2.5-coder:3b >/dev/null 2>&1 || \
+            ollama pull qwen2.5-coder:3b
+      volumeMounts:
+        - name: data
+          mountPath: /root/.ollama
+
   resources:
     requests:
       cpu: 500m
