@@ -10,7 +10,7 @@ workload:
     tag: main-fa99152
     pullPolicy: Always
 
-  containerPort: 8501
+  containerPort: 3000
 
   # env:
   #   - name: OLLAMA_BASE_URL
