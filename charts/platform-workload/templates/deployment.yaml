@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ .Values.workload.name }}
+  namespace: {{ .Values.namespace }}
+
+spec:
+  replicas: {{ .Values.workload.replicas }}
+
+  selector:
+    matchLabels:
+      app: {{ .Values.workload.name }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.workload.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.workload.name }}
+
+          image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
+
+          imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
+
+          ports:
+            - containerPort: {{ .Values.workload.containerPort }}
+{{- if .Values.configMap.enabled }}
+
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.workload.name }}
+
+{{- end }}
+
+{{- if .Values.workload.env }}
+
+          env:
+{{- range .Values.workload.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.workload.resources }}
+
+          resources:
+{{ toYaml .Values.workload.resources | nindent 12 }}
+
+{{- end }}
+
+{{- if .Values.workload.persistence.enabled }}
+
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.workload.persistence.mountPath }}
+
+{{- end }}
+
+{{- if .Values.workload.persistence.enabled }}
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.workload.name }}-pvc
+
+{{- end }}
