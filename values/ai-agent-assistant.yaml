@@ -29,5 +29,6 @@ configMap:
   enabled: true
   data:
     OLLAMA_BASE_URL: http://ollama:11434
+    FETCH_TIMEOUT_MS: 300000
 extraJob:
   enabled: false
