@@ -18,6 +18,12 @@ spec:
         app: {{ .Values.workload.name }}
 
     spec:
+{{- if .Values.workload.initContainers }}
+
+      initContainers:
+        {{ toYaml .Values.workload.initContainers | nindent 8 }}
+
+{{- end }}
       containers:
         - name: {{ .Values.workload.name }}
 
