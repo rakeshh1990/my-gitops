@@ -1,46 +1,33 @@
 namespace: ai-agent
-
 workload:
   name: assistant
-
   replicas: 1
-
   image:
     repository: ghcr.io/rakeshh1990/my-ai-agent
-    tag: main-fa99152
+    tag: main-7f37208
     pullPolicy: Always
-
   containerPort: 3000
-
   # env:
   #   - name: OLLAMA_BASE_URL
   #     value: http://ollama:11434
-
   resources:
     requests:
       cpu: 100m
       memory: 256Mi
-
     limits:
       cpu: 500m
       memory: 512Mi
-
   service:
     enabled: true
     port: 80
-
   ingress:
     enabled: true
     host: assistant.local
-
   persistence:
     enabled: false
-
 configMap:
   enabled: true
-
   data:
     OLLAMA_BASE_URL: http://ollama:11434
-
 extraJob:
   enabled: false
