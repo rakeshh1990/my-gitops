@@ -4,7 +4,7 @@ workload:
   replicas: 1
   image:
     repository: ghcr.io/rakeshh1990/my-ai-agent
-    tag: main-7f37208
+    tag: main-a8a5475
     pullPolicy: Always
   containerPort: 3000
   # env:
