@@ -52,5 +52,11 @@ workload:
     mountPath: /root/.ollama
     size: 20Gi
 
+configMap:
+  enabled: true
+  data:
+    - OLLAMA_KEEP_ALIVE=24h # Keep model in RAM for faster response
+    - OLLAMA_NUM_PARALLEL=2 # Good for i5 multitasking
+
 extraJob:
   enabled: false
