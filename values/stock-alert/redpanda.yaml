@@ -1,0 +1,79 @@
+namespace: stock-alert
+
+workload:
+  name: redpanda
+  replicas: 1
+
+  image:
+    repository: redpandadata/redpanda
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  containerPort: 9092
+
+  command:
+    - redpid
+
+  args:
+    - redpanda
+    - start
+    - --overprovisioned
+    - --smp
+    - "1"
+    - --memory
+    - 512M
+    - --reserve-memory
+    - 0M
+    - --node-id
+    - "0"
+    - --check=false
+    - --kafka-addr
+    - 0.0.0.0:9092
+    - --advertise-kafka-addr
+    - redpanda:9092
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+  persistence:
+    enabled: true
+    size: 20Gi
+    mountPath: /var/lib/redpanda/data
+
+service:
+  enabled: true
+  type: ClusterIP
+
+  ports:
+    - name: kafka
+      port: 9092
+      targetPort: 9092
+
+    - name: schema
+      port: 8081
+      targetPort: 8081
+
+    - name: pandaproxy
+      port: 8082
+      targetPort: 8082
+
+    - name: admin
+      port: 9644
+      targetPort: 9644
+
+configMap:
+  enabled: true
+  data:
+    - name: REDPANDA_AUTO_CREATE_TOPICS
+      value: "true"
+
+    - name: REDPANDA_LOG_LEVEL
+      value: info
+
+secret:
+  enabled: false
