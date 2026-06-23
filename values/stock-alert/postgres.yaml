@@ -35,4 +35,9 @@ persistence:
   mountPath: /var/lib/postgresql/data
 
 service:
+  enabled: true
   type: ClusterIP
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432

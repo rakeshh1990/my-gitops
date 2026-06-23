@@ -3,6 +3,8 @@ namespace: stock-alert
 workload:
   name: redpanda
   replicas: 1
+  podManagementPolicy: Parallel
+  updateStrategy: RollingUpdate
 
   image:
     repository: redpandadata/redpanda
@@ -11,8 +13,7 @@ workload:
 
   containerPort: 9092
 
-  command:
-    - redpid
+  command: []
 
   args:
     - redpanda
@@ -40,10 +41,11 @@ workload:
       cpu: 1000m
       memory: 1Gi
 
-  persistence:
-    enabled: true
-    size: 20Gi
-    mountPath: /var/lib/redpanda/data
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: standard
+  mountPath: /var/lib/redpanda/data
 
 service:
   enabled: true

@@ -39,18 +39,15 @@ spec:
         - containerPort: {{ .Values.workload.containerPort }}
 {{- end }}
 
-{{- if .Values.secret.enabled }}
         envFrom:
+{{- if .Values.secret.enabled }}
         - secretRef:
             name: {{ .Values.workload.name }}
 {{- end }}
 
 {{- if .Values.configMap.enabled }}
-
-        envFrom:
           - configMapRef:
               name: {{ .Values.workload.name }}
-
 {{- end }}
 
 {{- if .Values.workload.resources }}
