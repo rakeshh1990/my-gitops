@@ -30,9 +30,13 @@ spec:
         image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
         imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
         ports:
+{{- if .Values.service.ports }}
 {{- range .Values.service.ports }}
         - name: {{ .name }}
           containerPort: {{ .targetPort }}
+{{- end }}
+{{- else }}
+        - containerPort: {{ .Values.workload.containerPort }}
 {{- end }}
 
 {{- if .Values.secret.enabled }}

@@ -12,9 +12,15 @@ spec:
     app: {{ .Values.workload.name }}
 
   ports:
+
+{{- if .Values.service.ports }}
 {{- range .Values.service.ports }}
     - name: {{ .name }}
       port: {{ .port }}
       targetPort: {{ .targetPort }}
 {{- end }}
-      name: tcp
+{{- else }}
+    - name: tcp
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.workload.containerPort }}
+{{- end }}
