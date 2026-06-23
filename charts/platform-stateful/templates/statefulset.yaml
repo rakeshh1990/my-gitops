@@ -29,6 +29,10 @@ spec:
       securityContext:
         {{ toYaml .Values.securityContext.spec | nindent 8 }}
 {{- end }}
+{{- if .Values.initContainers }}
+      initContainers:
+{{ toYaml .Values.initContainers | nindent 4 }}
+{{- end }}
       containers:
       - name: {{ .Values.workload.name }}
         image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
