@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: stock-alert-postgres
+  namespace: stock-alert
+
+spec:
+
+  project: default
+
+  source:
+    repoURL: https://github.com/rakeshh1990/my-gitops.git
+
+    targetRevision: main
+
+    path: charts/platform-stateful
+
+    helm:
+      valueFiles:
+      - ../../values/stock-alert/postgres.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stock-alert
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
