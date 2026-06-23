@@ -31,7 +31,7 @@ spec:
 {{- end }}
 {{- if .Values.initContainers }}
       initContainers:
-{{ toYaml .Values.initContainers | nindent 4 }}
+{{ toYaml .Values.initContainers | nindent 6 }}
 {{- end }}
       containers:
       - name: {{ .Values.workload.name }}
