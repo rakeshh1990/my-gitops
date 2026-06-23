@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ .Values.workload.name }}
+  namespace: {{ .Values.namespace }}
+
+spec:
+  type: {{ .Values.service.type }}
+
+  selector:
+    app: {{ .Values.workload.name }}
+
+  ports:
+    - port: {{ .Values.workload.containerPort }}
+      targetPort: {{ .Values.workload.containerPort }}
+      name: tcp

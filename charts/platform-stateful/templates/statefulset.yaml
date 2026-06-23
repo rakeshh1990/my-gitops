@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: {{ .Values.workload.name }}
+  namespace: {{ .Values.namespace }}
+
+spec:
+  serviceName:
+    {{ .Values.workload.name }}
+
+  replicas:
+    {{ .Values.workload.replicas }}
+
+  selector:
+    matchLabels:
+      app: {{ .Values.workload.name }}
+
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.workload.name }}
+
+    spec:
+      containers:
+      - name:
+          {{ .Values.workload.name }}
+        image:
+          "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
+        imagePullPolicy:
+          {{ .Values.workload.image.pullPolicy }}
+        ports:
+        - containerPort:
+            {{ .Values.workload.containerPort }}
+
+{{- if .Values.secret.enabled }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.workload.name }}
+{{- end }}
+
+{{- if .Values.workload.resources }}
+        resources:
+{{ toYaml .Values.workload.resources | nindent 10 }}
+{{- end }}
+
+        volumeMounts:
+        - name: data
+          mountPath:
+            {{ .Values.persistence.mountPath }}
+
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+
+    spec:
+      accessModes:
+      - ReadWriteOnce
+
+      resources:
+        requests:
+          storage:
+            {{ .Values.persistence.size }}
+
+      storageClassName:
+        {{ .Values.persistence.storageClass }}

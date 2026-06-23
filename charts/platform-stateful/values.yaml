@@ -1,0 +1,40 @@
+namespace: default
+
+workload:
+
+  name: postgres
+
+  replicas: 1
+
+  image:
+    repository: postgres
+    tag: "17"
+    pullPolicy: IfNotPresent
+
+  containerPort: 5432
+
+  resources: {}
+
+persistence:
+
+  enabled: true
+
+  size: 20Gi
+
+  storageClass: standard
+
+  mountPath: /var/lib/postgresql/data
+
+
+service:
+  type: ClusterIP
+
+
+secret:
+
+  enabled: true
+
+  data:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: postgres
