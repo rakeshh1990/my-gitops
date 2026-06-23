@@ -25,6 +25,10 @@ spec:
         app: {{ .Values.workload.name }}
 
     spec:
+{{- if .Values.securityContext.enabled }}
+      securityContext:
+        {{ toYaml .Values.securityContext | nindent 8 }}
+{{- end }}
       containers:
       - name: {{ .Values.workload.name }}
         image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"

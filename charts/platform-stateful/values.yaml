@@ -40,3 +40,6 @@ secret:
 configMap:
   enabled: false
   data: []
+
+securityContext:
+  enabled: false

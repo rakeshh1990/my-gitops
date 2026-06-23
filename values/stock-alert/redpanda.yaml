@@ -24,6 +24,11 @@ workload:
     - "1G"
     - --reserve-memory
     - "0M"
+    - --kafka-addr
+    - internal://0.0.0.0:9092
+
+    - --advertise-kafka-addr
+    - internal://redpanda:9092
 
   resources:
     requests:
@@ -71,3 +76,14 @@ configMap:
 
 secret:
   enabled: false
+
+securityContext:
+
+  enabled: true
+
+  spec:
+
+    runAsUser: 101
+    runAsGroup: 101
+
+    fsGroup: 101
