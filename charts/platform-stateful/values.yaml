@@ -31,10 +31,12 @@ service:
 
 
 secret:
-
   enabled: true
-
   data:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
     POSTGRES_DB: postgres
+
+configMap:
+  enabled: false
+  data: []

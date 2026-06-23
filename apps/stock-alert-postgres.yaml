@@ -3,7 +3,7 @@ kind: Application
 
 metadata:
   name: stock-alert-postgres
-  namespace: stock-alert
+  namespace: argocd
 
 spec:
 

@@ -3,6 +3,8 @@ namespace: stock-alert
 workload:
   name: postgres
   replicas: 1
+  podManagementPolicy: Parallel
+  updateStrategy: RollingUpdate
   image:
     repository: postgres
     tag: "17"
@@ -22,6 +24,9 @@ secret:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: password
     POSTGRES_DB: postgres
+
+configMap:
+  enabled: false
 
 persistence:
   enabled: true
