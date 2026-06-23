@@ -8,15 +8,15 @@ workload:
 
   image:
     repository: redpandadata/redpanda
-    tag: latest
+    tag: v25.1.4
     pullPolicy: IfNotPresent
 
   containerPort: 9092
 
-  command: []
+  command:
+    - redpanda
 
   args:
-    - redpanda
     - start
     - --overprovisioned
     - --smp
@@ -35,11 +35,11 @@ workload:
 
   resources:
     requests:
-      cpu: 250m
-      memory: 512Mi
-    limits:
-      cpu: 1000m
+      cpu: 500m
       memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
 
 persistence:
   enabled: true

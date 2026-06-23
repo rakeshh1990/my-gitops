@@ -29,6 +29,14 @@ spec:
       - name: {{ .Values.workload.name }}
         image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
         imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
+{{- if .Values.workload.command }}
+        command:
+{{ toYaml .Values.workload.command | nindent 10 }}
+{{- end }}
+{{- if .Values.workload.args }}
+        args:
+{{ toYaml .Values.workload.args | nindent 10 }}
+{{- end }}
         ports:
 {{- if .Values.service.ports }}
 {{- range .Values.service.ports }}
