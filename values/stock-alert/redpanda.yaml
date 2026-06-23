@@ -13,8 +13,7 @@ workload:
 
   containerPort: 9092
 
-  command:
-    - redpanda
+  command: []
 
   args:
     - start
