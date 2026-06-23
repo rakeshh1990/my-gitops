@@ -22,16 +22,12 @@ workload:
     - --smp
     - "1"
     - --memory
-    - 512M
+    - "1G"
     - --reserve-memory
-    - 0M
-    - --node-id
-    - "0"
+    - "0M"
     - --check=false
     - --kafka-addr
     - 0.0.0.0:9092
-    - --advertise-kafka-addr
-    - redpanda:9092
 
   resources:
     requests:
