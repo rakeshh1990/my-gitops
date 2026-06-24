@@ -23,6 +23,6 @@ spec:
             name: {{ .Values.workload.name }}
 
             port:
-              number: {{ .Values.workload.service.port }}
+              number: {{ .Values.workload.service.ports | first | dig "port" }}
 
 {{- end }}

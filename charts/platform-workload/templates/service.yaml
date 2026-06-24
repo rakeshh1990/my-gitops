@@ -8,13 +8,20 @@ metadata:
   namespace: {{ .Values.namespace }}
 
 spec:
+
   type: {{ .Values.workload.service.type }}
 
   selector:
     app: {{ .Values.workload.name }}
 
   ports:
-  - port: {{ .Values.workload.service.port }}
-    targetPort: {{ .Values.workload.containerPort }}
+
+{{- range .Values.workload.service.ports }}
+
+  - name: {{ .name }}
+    port: {{ .port }}
+    targetPort: {{ .targetPort }}
+
+{{- end }}
 
 {{- end }}
