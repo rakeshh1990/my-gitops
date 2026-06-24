@@ -31,10 +31,10 @@ workload:
         port: 80
         targetPort: 3000
 
-  ingress:
-    enabled: true
-    host: assistant.local
-    servicePort: 80
+ingress:
+  enabled: true
+  host: assistant.local
+  servicePort: 80
 
 configMap:
   enabled: true
