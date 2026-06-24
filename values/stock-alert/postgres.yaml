@@ -41,3 +41,35 @@ service:
     - name: postgres
       port: 5432
       targetPort: 5432
+
+probes:
+
+  enabled: true
+
+  readiness:
+    enabled: true
+
+    spec:
+
+      exec:
+
+        command:
+        - sh
+        - -c
+        - pg_isready -U postgres
+
+      periodSeconds: 10
+
+  liveness:
+    enabled: true
+
+    spec:
+
+      exec:
+
+        command:
+        - sh
+        - -c
+        - pg_isready -U postgres
+
+      periodSeconds: 30
