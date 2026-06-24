@@ -5,30 +5,14 @@ workload:
 
   replicas: 1
 
+  podManagementPolicy: Parallel
+
+  updateStrategy: RollingUpdate
+
   image:
     repository: ollama/ollama
     tag: latest
-
-  containerPort: 11434
-
-  initContainers:
-    - name: pull-model
-      image: ollama/ollama:latest
-      command:
-        - sh
-        - -c
-        - |
-          ollama serve &
-
-          until ollama list >/dev/null 2>&1; do
-            sleep 2
-          done
-
-          ollama show qwen2.5-coder:3b >/dev/null 2>&1 || \
-            ollama pull qwen2.5-coder:3b
-      volumeMounts:
-        - name: data
-          mountPath: /root/.ollama
+    pullPolicy: IfNotPresent
 
   resources:
     requests:
@@ -39,24 +23,134 @@ workload:
       cpu: 2
       memory: 4Gi
 
-  service:
-    enabled: true
-    port: 11434
 
-  ingress:
-    enabled: true
-    host: ollama.local
+service:
+  enabled: true
 
-  persistence:
-    enabled: true
-    mountPath: /root/.ollama
-    size: 20Gi
+  type: ClusterIP
+
+  ports:
+    - name: ollama
+      port: 11434
+      targetPort: 11434
+
+
+ingress:
+  enabled: true
+
+  className: nginx
+
+  host: ollama.local
+
+  servicePort: 11434
+
+  annotations:
+    nginx.idk.io/ssl-redirect: "false"
+
+
+persistence:
+  enabled: true
+
+  size: 20Gi
+
+  storageClass: standard
+
+  mountPath: /root/.ollama
+
 
 configMap:
   enabled: true
-  data:
-    - OLLAMA_KEEP_ALIVE=24h # Keep model in RAM for faster response
-    - OLLAMA_NUM_PARALLEL=2 # Good for i5 multitasking
 
-extraJob:
+  data:
+
+    - name: OLLAMA_KEEP_ALIVE
+      value: "24h"
+
+    - name: OLLAMA_NUM_PARALLEL
+      value: "2"
+
+
+secret:
   enabled: false
+
+
+securityContext:
+  enabled: false
+
+
+
+probes:
+
+  enabled: true
+
+
+  path: /api/tags
+
+  port: 11434
+
+
+  startup:
+
+    failureThreshold: 60
+
+    periodSeconds: 5
+
+
+  readiness:
+
+    periodSeconds: 10
+
+    timeoutSeconds: 3
+
+    failureThreshold: 3
+
+
+  liveness:
+
+    initialDelaySeconds: 60
+
+    periodSeconds: 20
+
+    timeoutSeconds: 3
+
+    failureThreshold: 3
+
+
+
+initContainers:
+
+- name: pull-model
+
+  image: ollama/ollama:latest
+
+  imagePullPolicy: IfNotPresent
+
+
+  command:
+  - sh
+  - -c
+  - |
+      echo "Starting temporary Ollama server"
+
+      ollama serve &
+
+      until ollama list >/dev/null 2>&1
+      do
+          sleep 2
+      done
+
+
+      echo "Checking model"
+
+      ollama show qwen2.5-coder:3b >/dev/null 2>&1 || \
+      ollama pull qwen2.5-coder:3b
+
+
+      echo "Model ready"
+
+
+  volumeMounts:
+
+  - name: data
+
+    mountPath: /root/.ollama
