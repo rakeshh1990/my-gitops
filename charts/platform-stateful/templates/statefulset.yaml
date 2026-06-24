@@ -10,6 +10,8 @@ spec:
 
   replicas: {{ .Values.workload.replicas }}
 
+  revisionHistoryLimit: {{ .Values.workload.revisionHistoryLimit | default 3 }}
+
   podManagementPolicy: {{ .Values.workload.podManagementPolicy }}
 
   updateStrategy:
@@ -33,7 +35,7 @@ spec:
       initContainers:
 {{ toYaml .Values.initContainers | nindent 6 }}
 {{- end }}
-      revisionHistoryLimit: {{ .Values.workload.revisionHistoryLimit | default 3 }}
+      
       containers:
       - name: {{ .Values.workload.name }}
         image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
@@ -71,14 +73,36 @@ spec:
         resources:
           {{ toYaml .Values.workload.resources | nindent 10 }}
 {{- end }}
+{{- if .Values.probes.enabled }}
 
+{{- if .Values.probes.startup.enabled }}
+        startupProbe:
+{{ toYaml .Values.probes.startup.spec | nindent 10 }}
+{{- end }}
+
+
+{{- if .Values.probes.readiness.enabled }}
+        readinessProbe:
+{{ toYaml .Values.probes.readiness.spec | nindent 10 }}
+{{- end }}
+
+
+{{- if .Values.probes.liveness.enabled }}
+        livenessProbe:
+{{ toYaml .Values.probes.liveness.spec | nindent 10 }}
+{{- end }}
+
+{{- end }}
+{{- if .Values.persistence.enabled }}
         volumeMounts:
-        - name: data
+        - name: {{ .Values.persistence.name | default "data" }}
           mountPath: {{ .Values.persistence.mountPath }}
+{{- end }}
+{{- if .Values.persistence.enabled }}
 
   volumeClaimTemplates:
   - metadata:
-      name: data
+      name: {{ .Values.persistence.name | default "data" }}
 
     spec:
       accessModes:
@@ -89,3 +113,5 @@ spec:
           storage: {{ .Values.persistence.size }}
 
       storageClassName: {{ .Values.persistence.storageClass }}
+
+{{- end }}

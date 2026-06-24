@@ -43,3 +43,13 @@ configMap:
 
 securityContext:
   enabled: false
+
+persistence:
+  enabled: false
+
+ingress:
+  enabled: false
+  className: nginx
+  host: ""
+  servicePort: 80
+  annotations: {}
