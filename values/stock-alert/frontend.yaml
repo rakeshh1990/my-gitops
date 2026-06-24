@@ -19,7 +19,7 @@ workload:
     ports:
       - name: http
         port: 80
-        targetPort: 80
+        targetPort: 3000
   ingress:
     enabled: true
     host: stock-alert.local
