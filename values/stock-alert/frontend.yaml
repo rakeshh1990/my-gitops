@@ -22,7 +22,7 @@ service:
       targetPort: 80
 ingress:
   enabled: true
-  host: frontend.local
+  host: stocker-alert.local
 configMap:
   enabled: false
 secret:
