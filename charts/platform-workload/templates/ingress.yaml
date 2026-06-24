@@ -1,4 +1,4 @@
-{{- if .Values.workload.ingress.enabled }}
+{{- if .Values.ingress.enabled }}
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -11,18 +11,15 @@ spec:
   ingressClassName: nginx
 
   rules:
-  - host: {{ .Values.workload.ingress.host }}
-
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-
-        backend:
-          service:
-            name: {{ .Values.workload.name }}
-
-            port:
-              number: {{ .Values.workload.service.ports | first | dig "port" }}
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.workload.name }}
+                port:
+                  number: {{ .Values.ingress.servicePort }}
 
 {{- end }}
