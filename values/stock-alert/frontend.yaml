@@ -22,7 +22,7 @@ workload:
         targetPort: 80
   ingress:
     enabled: true
-    host: stocker-alert.local
+    host: stock-alert.local
 configMap:
   enabled: false
 secret:
