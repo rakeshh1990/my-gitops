@@ -15,7 +15,7 @@ spec:
 
   replicas: {{ .Values.workload.replicas }}
 
-  revisionHistoryLimit: {{ .Values.workload.revisionHistoryLimit | default 3 }}
+  # revisionHistoryLimit: {{ .Values.workload.revisionHistoryLimit | default 10 }}
 
   podManagementPolicy: {{ .Values.workload.podManagementPolicy }}
 
