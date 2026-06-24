@@ -18,7 +18,7 @@ spec:
         - ../../values/stock-alert/frontend.yaml
 
   destination:
-    server: https://kubernetes.default.srv
+    server: https://kubernetes.default.svc
     namespace: stock-alert
 
   syncPolicy:
