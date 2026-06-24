@@ -47,6 +47,11 @@ securityContext:
 persistence:
   enabled: false
 
+persistentVolumeClaimRetentionPolicy:
+  enabled: true
+  whenDeleted: Retain
+  whenScaled: Retain
+
 ingress:
   enabled: false
   className: nginx
