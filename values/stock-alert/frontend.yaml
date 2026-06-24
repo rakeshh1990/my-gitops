@@ -1,14 +1,11 @@
 namespace: stock-alert
-
 workload:
   name: frontend
   replicas: 1
-
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-frontend
-    tag: latest
+    tag: main-19e8316
     pullPolicy: Always
-
   resources:
     requests:
       cpu: 100m
@@ -16,42 +13,33 @@ workload:
     limits:
       cpu: 500m
       memory: 512Mi
-
 service:
   enabled: true
   type: ClusterIP
-
   ports:
     - name: http
       port: 80
       targetPort: 80
-
 ingress:
   enabled: true
   host: frontend.local
-
 configMap:
   enabled: false
-
 secret:
   enabled: false
-
 probes:
   enabled: true
-
   startupProbe:
     httpGet:
       path: /
       port: 80
     failureThreshold: 30
     periodSeconds: 10
-
   readinessProbe:
     httpGet:
       path: /
       port: 80
     periodSeconds: 10
-
   livenessProbe:
     httpGet:
       path: /
