@@ -14,7 +14,7 @@ spec:
 
     targetRevision: main
 
-    path: charts/platform-workload
+    path: charts/platform-stateful
 
     helm:
       valueFiles:
