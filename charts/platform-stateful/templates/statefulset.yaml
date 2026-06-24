@@ -33,6 +33,7 @@ spec:
       initContainers:
 {{ toYaml .Values.initContainers | nindent 6 }}
 {{- end }}
+      revisionHistoryLimit: {{ .Values.workload.revisionHistoryLimit | default 3 }}
       containers:
       - name: {{ .Values.workload.name }}
         image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
