@@ -4,7 +4,7 @@ workload:
   replicas: 1
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-frontend
-    tag: main-b64712c
+    tag: main-52517c1
     pullPolicy: Always
   resources:
     requests:
