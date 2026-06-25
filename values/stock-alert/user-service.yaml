@@ -1,0 +1,78 @@
+namespace: stock-alert
+
+workload:
+  name: user-service
+
+  image:
+    repository: ghcr.io/rakeshh1990/stock-alert-user-service
+    tag: latest
+
+  replicaCount: 1
+
+  containerPort: 8000
+
+  service:
+    enabled: true
+    port: 8004
+    targetPort: 8000
+
+
+configMap:
+  enabled: true
+
+  data:
+
+    - name: POSTGRES_HOST
+      value: postgres
+
+    - name: POSTGRES_PORT
+      value: "5432"
+
+    - name: DB_NAME
+      value: userdb
+
+    - name: INTERNAL_API_KEY
+      value: change-this-in-production
+
+
+secret:
+  enabled: true
+
+  data:
+
+    POSTGRES_USER: stock
+
+    POSTGRES_PASSWORD: stockpass
+
+
+ingress:
+  enabled: false
+
+
+probes:
+
+  startup:
+    enabled: true
+    path: /health
+    port: 8000
+
+  readiness:
+    enabled: true
+    path: /health
+    port: 8000
+
+  liveness:
+    enabled: true
+    path: /health
+    port: 8000
+
+
+resources:
+
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi
