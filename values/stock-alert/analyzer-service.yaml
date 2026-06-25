@@ -1,0 +1,63 @@
+namespace: stock-alert
+
+workload:
+  name: analyzer-service
+
+  replicaCount: 1
+
+  image:
+    repository: ghcr.io/rakeshh1990/stock-alert-analyzer-service
+    tag: latest
+
+  containerPort: 8000
+
+  service:
+    enabled: true
+    port: 8002
+    targetPort: 8000
+
+
+configMap:
+  enabled: true
+
+  data:
+
+    - name: MARKET_URL
+      value: http://market-service:8006
+
+
+secret:
+  enabled: false
+
+
+ingress:
+  enabled: false
+
+
+probes:
+
+  startup:
+    enabled: true
+    path: /health
+    port: 8000
+
+  readiness:
+    enabled: true
+    path: /health
+    port: 8000
+
+  liveness:
+    enabled: true
+    path: /health
+    port: 8000
+
+
+resources:
+
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+  limits:
+    cpu: "1"
+    memory: 1Gi
