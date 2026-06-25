@@ -4,7 +4,7 @@ workload:
   replicas: 1
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-api-gateway
-    tag: main-3094f22
+    tag: main-c1db506
     pullPolicy: Always
   containerPort: 8000
   resources:
