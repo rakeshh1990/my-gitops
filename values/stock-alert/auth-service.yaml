@@ -42,7 +42,7 @@ secret:
   enabled: true
   data:
     - name: JWT_SECRET
-      value: supersecretjwt
+      value: super-secret
 probes:
   enabled: true
   startupProbe:
