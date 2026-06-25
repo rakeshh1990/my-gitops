@@ -1,106 +1,64 @@
 namespace: stock-alert
-
 workload:
   name: auth-service
-
   replicas: 1
-
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-auth-service
-    tag: latest
+    tag: main-c1db506
     pullPolicy: Always
-
   containerPort: 8000
-
   resources:
     requests:
       cpu: 100m
       memory: 256Mi
-
     limits:
       cpu: 500m
       memory: 512Mi
-
-
   service:
     enabled: true
-
     type: ClusterIP
-
     ports:
       - name: http
         port: 8001
         targetPort: 8000
-
-
 ingress:
   enabled: false
-
-
 configMap:
   enabled: true
-
   data:
-
     - name: POSTGRES_HOST
       value: postgres
-
-
     - name: POSTGRES_PORT
       value: "5432"
-
-
     - name: POSTGRES_USER
       value: stock
-
-
     - name: POSTGRES_PASSWORD
       value: stockpass
-
-
     - name: DB_NAME
       value: authdb
-
-
     - name: JWT_ALG
       value: HS256
-
-
 secret:
   enabled: true
-
   data:
-
     - name: JWT_SECRET
       value: supersecretjwt
-
-
-
 probes:
   enabled: true
-
-
   startupProbe:
     httpGet:
       path: /health
       port: 8000
-
     failureThreshold: 30
     periodSeconds: 10
-
-
   readinessProbe:
     httpGet:
       path: /health
       port: 8000
-
     periodSeconds: 10
-
-
   livenessProbe:
     httpGet:
       path: /health
       port: 8000
-
     initialDelaySeconds: 30
     periodSeconds: 30
