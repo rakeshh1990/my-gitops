@@ -1,0 +1,57 @@
+{{- if and .Values.postgres .Values.postgres.users }}
+
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: postgres-user-bootstrap
+  namespace: {{ .Values.namespace }}
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+
+spec:
+  template:
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+      - name: bootstrap
+
+        image: postgres:17
+
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres
+              key: POSTGRES_PASSWORD
+
+        command:
+        - sh
+        - -c
+        - |
+
+{{- range .Values.postgres.users }}
+
+          psql \
+          -h postgres \
+          -U postgres \
+          -d postgres \
+          -c "DO \$\$ BEGIN
+                IF NOT EXISTS (
+                  SELECT
+                  FROM pg_roles
+                  WHERE rolname='{{ .name }}'
+                )
+                THEN
+                  CREATE ROLE {{ .name }}
+                  LOGIN
+                  PASSWORD '{{ .password }}';
+                END IF;
+              END \$\$;"
+
+{{- end }}
+
+{{- end }}

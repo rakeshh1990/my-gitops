@@ -28,6 +28,11 @@ secret:
 configMap:
   enabled: false
 
+postgres:
+  users:
+    - name: stock
+      password: stockpass
+
 persistence:
   enabled: true
   size: 20Gi
