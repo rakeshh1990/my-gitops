@@ -1,0 +1,74 @@
+namespace: stock-alert
+workload:
+  name: scanner-service
+  replicaCount: 1
+  image:
+    repository: ghcr.io/rakeshh1990/stock-alert-scanner-service
+    tag: main-bdab861
+  containerPort: 8000
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8005
+        targetPort: 8000
+configMap:
+  enabled: true
+  data:
+    - name: POSTGRES_HOST
+      value: postgres
+    - name: POSTGRES_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: scanner_db
+    - name: USER_SERVICE_URL
+      value: http://user-service:8002
+    - name: MARKET_SERVICE_URL
+      value: http://market-service:8006
+    - name: KAFKA_BROKER
+      value: redpanda:9092
+    - name: KAFKA_ALERT_TOPIC
+      value: alert.triggered
+    - name: INTERNAL_API_KEY
+      value: change-this-in-production
+    - name: SCAN_SCHEDULE_ENABLED
+      value: "true"
+    - name: SCAN_SCHEDULE_SCOPE
+      value: nifty100
+    - name: SCAN_SCHEDULE_HOUR
+      value: "18"
+    - name: SCAN_SCHEDULE_MINUTE
+      value: "0"
+    - name: SCAN_SCHEDULE_TIMEZONE
+      value: Asia/Kolkata
+
+secret:
+  enabled: true
+  data:
+    - name: POSTGRES_USER
+      value: stock
+    - name: POSTGRES_PASSWORD
+      value: stockpass
+ingress:
+  enabled: false
+probes:
+  startup:
+    enabled: true
+    path: /health
+    port: 8000
+  readiness:
+    enabled: true
+    path: /health
+    port: 8000
+  liveness:
+    enabled: true
+    path: /health
+    port: 8000
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
