@@ -5,7 +5,7 @@ workload:
   revisionHistoryLimit: 3
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-frontend
-    tag: main-68b430c
+    tag: main-3094f22
     pullPolicy: Always
   resources:
     requests:
@@ -23,24 +23,18 @@ workload:
         targetPort: 3000
 ingress:
   enabled: true
-
   host: stock-alert.local
-
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-
   paths:
-
     - path: /
       pathType: Prefix
       serviceName: frontend
       servicePort: 80
-
     - path: /api(/|$)(.*)
       pathType: ImplementationSpecific
       serviceName: api-gateway
       servicePort: 8000
-
 configMap:
   enabled: false
 secret:
