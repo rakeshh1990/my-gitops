@@ -14,13 +14,13 @@ workload:
     limits:
       cpu: 500m
       memory: 512Mi
-service:
-  enabled: true
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 8000
-      targetPort: 8000
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8000
+        targetPort: 8000
 ingress:
   enabled: false
 configMap:
