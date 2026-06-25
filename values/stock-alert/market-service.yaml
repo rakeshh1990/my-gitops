@@ -1,0 +1,54 @@
+namespace: stock-alert
+workload:
+  name: market-service
+  replicaCount: 1
+  image:
+    repository: ghcr.io/rakeshh1990/stock-alert-market-service
+    tag: main-9748f85
+  containerPort: 8000
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8006
+        targetPort: 8000
+configMap:
+  enabled: true
+  data:
+    - name: POSTGRES_HOST
+      value: postgres
+    - name: POSTGRES_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: market_db
+
+secret:
+  enabled: true
+  data:
+    - name: POSTGRES_USER
+      value: stock
+    - name: POSTGRES_PASSWORD
+      value: stockpass
+ingress:
+  enabled: false
+probes:
+  startup:
+    enabled: true
+    path: /health
+    port: 8000
+  readiness:
+    enabled: true
+    path: /health
+    port: 8000
+  liveness:
+    enabled: true
+    path: /health
+    port: 8000
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi

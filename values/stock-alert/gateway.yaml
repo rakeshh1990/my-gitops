@@ -51,6 +51,9 @@ configMap:
 
     - name: SCANNER_URL
       value: http://scanner-service:8005
+
+    - name: MARKET_URL
+      value: http://market-service:8006
 secret:
   enabled: true
   data:
