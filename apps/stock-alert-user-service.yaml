@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: stock-alert-user-service
+  namespace: argocd
+
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/rakeshh1990/my-gitops.git
+    targetRevision: main
+    path: charts/platform-workload
+    helm:
+      valueFiles:
+        - ../../values/stock-alert/user-service.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: stock-alert
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
