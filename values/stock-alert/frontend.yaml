@@ -25,6 +25,7 @@ ingress:
   enabled: true
   host: stock-alert.local
   annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   paths:
     - path: /
