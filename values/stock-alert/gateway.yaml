@@ -26,16 +26,20 @@ ingress:
 configMap:
   enabled: true
   data:
-    - name: AUTH_SERVICE_URL
+    - name: AUTH_URL
       value: http://auth-service:8001
-    - name: USER_SERVICE_URL
+
+    - name: USER_URL
       value: http://user-service:8002
-    - name: ANALYZER_SERVICE_URL
+
+    - name: ANALYZER_URL
       value: http://analyzer-service:8003
-    - name: SCANNER_SERVICE_URL
-      value: http://scanner-service:8004
-    - name: NOTIFIER_SERVICE_URL
-      value: http://notifier-service:8005
+
+    - name: NOTIFIER_URL
+      value: http://notifier-service:8004
+
+    - name: SCANNER_URL
+      value: http://scanner-service:8005
 secret:
   enabled: true
   data:
