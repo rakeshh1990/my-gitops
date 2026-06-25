@@ -4,7 +4,7 @@ workload:
   replicaCount: 1
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-scanner-service
-    tag: main-bdab861
+    tag: main-4344d97
   containerPort: 8000
   service:
     enabled: true
@@ -42,7 +42,6 @@ configMap:
       value: "0"
     - name: SCAN_SCHEDULE_TIMEZONE
       value: Asia/Kolkata
-
 secret:
   enabled: true
   data:
