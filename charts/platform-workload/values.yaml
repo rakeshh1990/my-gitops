@@ -32,11 +32,13 @@ workload:
 ingress:
   enabled: false
 
-  host: ""
+  host: example.local
+
+  servicePort: 80
 
   annotations: {}
 
-  tls: []
+  paths: []
 
 
 configMap:

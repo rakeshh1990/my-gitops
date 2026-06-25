@@ -1,5 +1,7 @@
 {{- if .Values.ingress.enabled }}
 
+{{- $root := . }}
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 
@@ -30,9 +32,9 @@ spec:
 
         backend:
           service:
-            name: {{ .serviceName }}
+            name: {{ .serviceName | default $root.Values.workload.name }}
             port:
-              number: {{ .servicePort }}
+              number: {{ .servicePort | default $root.Values.ingress.servicePort }}
 
 {{- end }}
 
@@ -43,8 +45,7 @@ spec:
 
         backend:
           service:
-            name: {{ .workload.name }}
-
+            name: {{ .Values.workload.name }}
             port:
               number: {{ .Values.ingress.servicePort }}
 
