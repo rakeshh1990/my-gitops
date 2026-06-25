@@ -23,8 +23,19 @@ workload:
         targetPort: 3000
 ingress:
   enabled: true
+
   host: stock-alert.local
-  servicePort: 80
+
+  paths:
+
+    - path: /
+      serviceName: frontend
+      servicePort: 80
+
+    - path: /api
+      serviceName: api-gateway
+      servicePort: 8000
+
 configMap:
   enabled: false
 secret:
