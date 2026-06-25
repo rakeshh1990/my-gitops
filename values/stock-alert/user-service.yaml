@@ -8,8 +8,11 @@ workload:
   containerPort: 8000
   service:
     enabled: true
-    port: 8004
-    targetPort: 8000
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8004
+        targetPort: 8000
 configMap:
   enabled: true
   data:
