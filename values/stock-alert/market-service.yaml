@@ -4,7 +4,7 @@ workload:
   replicaCount: 1
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-market-service
-    tag: main-9748f85
+    tag: main-bdab861
   containerPort: 8000
   service:
     enabled: true
@@ -22,7 +22,6 @@ configMap:
       value: "5432"
     - name: DB_NAME
       value: market_db
-
 secret:
   enabled: true
   data:
