@@ -4,7 +4,7 @@ workload:
   replicaCount: 1
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-notifier-service
-    tag: latest
+    tag: main-9748f85
   containerPort: 8000
   service:
     enabled: true
