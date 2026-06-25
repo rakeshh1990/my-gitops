@@ -24,8 +24,10 @@ configMap:
 secret:
   enabled: true
   data:
-    POSTGRES_USER: stock
-    POSTGRES_PASSWORD: stockpass
+    - name: POSTGRES_USER
+      value: stock
+    - name: POSTGRES_PASSWORD
+      value: stockpass
 ingress:
   enabled: false
 probes:
