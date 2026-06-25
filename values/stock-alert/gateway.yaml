@@ -22,7 +22,14 @@ workload:
         port: 8000
         targetPort: 8000
 ingress:
-  enabled: false
+  enabled: true
+  host: stock-alert.local
+
+  paths:
+    - path: /api
+      pathType: Prefix
+      serviceName: api-gateway
+      servicePort: 8000
 configMap:
   enabled: true
   data:
