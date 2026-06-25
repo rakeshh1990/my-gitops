@@ -48,7 +48,13 @@ spec:
                 THEN
                   CREATE ROLE {{ .name }}
                   LOGIN
+                  CREATEDB
                   PASSWORD '{{ .password }}';
+                ELSE
+                    ALTER ROLE {{ .name }}
+                    LOGIN
+                    CREATEDB
+                    PASSWORD '{{ .password }}';
                 END IF;
               END \$\$;"
 
