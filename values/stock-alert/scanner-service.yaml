@@ -4,7 +4,7 @@ workload:
   replicaCount: 1
   image:
     repository: ghcr.io/rakeshh1990/stock-alert-scanner-service
-    tag: main-4344d97
+    tag: main-ec6668b
   containerPort: 8000
   service:
     enabled: true
