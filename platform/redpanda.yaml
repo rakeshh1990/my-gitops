@@ -13,7 +13,7 @@ spec:
     path: charts/platform-stateful
     helm:
       valueFiles:
-        - ../../values/stock-alert/redpanda.yaml
+        - ../../values/platform/redpanda.yaml
 
   destination:
     server: https://kubernetes.default.svc
