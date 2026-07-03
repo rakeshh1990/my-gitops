@@ -27,7 +27,7 @@ configMap:
   enabled: true
   data:
     - name: POSTGRES_HOST
-      value: postgres
+      value: postgres.platform.svc.cluster.local
     - name: POSTGRES_PORT
       value: "5432"
     - name: POSTGRES_USER
