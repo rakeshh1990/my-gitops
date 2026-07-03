@@ -6,17 +6,16 @@ metadata:
 spec:
   project: default
 
-  sources:
-    - repoURL: https://charts.bitnami.com/bitnami
-      chart: postgresql
-      targetRevision: 16.7.27
-      helm:
-        valueFiles:
-          - $values/values/platform/postgres.yaml
+  source:
+    repoURL: https://github.com/rakeshh1990/my-gitops.git
 
-    - repoURL: https://github.com/rakeshh1990/my-gitops.git
-      targetRevision: main
-      ref: values
+    targetRevision: main
+
+    path: charts/platform-stateful
+
+    helm:
+      valueFiles:
+      - ../../values/platform/postgres.yaml
 
   destination:
     server: https://kubernetes.default.svc
