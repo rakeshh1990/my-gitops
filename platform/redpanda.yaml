@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 
 metadata:
-  name: stock-alert-redpanda
+  name: redpanda
   namespace: argocd
 
 spec:

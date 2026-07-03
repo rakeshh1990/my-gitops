@@ -28,7 +28,7 @@ workload:
     - internal://0.0.0.0:9092
 
     - --advertise-kafka-addr
-    - internal://redpanda:9092
+    - internal://redpanda.platform.svc.cluster.local:9092
 
   resources:
     requests:

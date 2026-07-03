@@ -19,7 +19,7 @@ configMap:
     - name: SERVICE_PORT
       value: "8000"
     - name: KAFKA_BROKER
-      value: redpanda:9092
+      value: redpanda.platform.svc.cluster.local:9092
     - name: KAFKA_ALERT_TOPIC
       value: alert.triggered
     - name: KAFKA_NOTIFIER_GROUP

@@ -27,7 +27,7 @@ configMap:
     - name: MARKET_SERVICE_URL
       value: http://market-service:8006
     - name: KAFKA_BROKER
-      value: redpanda:9092
+      value: redpanda.platform.svc.cluster.local:9092
     - name: KAFKA_ALERT_TOPIC
       value: alert.triggered
     - name: INTERNAL_API_KEY
