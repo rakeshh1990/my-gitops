@@ -21,6 +21,8 @@
 !/charts/
 !/values/
 !/apps/
+!/root/
+!/platform/
 
 # Ignore all files in jobs subdirectories except for folders.
 # Note: git doesn't track folders, only file content.

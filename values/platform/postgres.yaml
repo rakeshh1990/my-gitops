@@ -1,0 +1,9 @@
+auth:
+  postgresPassword: postgres
+
+primary:
+  persistence:
+    enabled: true
+    size: 8Gi
+
+architecture: standalone
