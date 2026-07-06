@@ -1,0 +1,66 @@
+namespace: platform
+
+workload:
+  name: vault
+  replicas: 1
+
+  image:
+    repository: hashicorp/vault
+    tag: "1.20.3"
+    pullPolicy: IfNotPresent
+
+  containerPort: 8200
+
+  command:
+    - vault
+
+  args:
+    - server
+    - -dev
+    - -dev-root-token-id=root
+    - -dev-listen-address=0.0.0.0:8200
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+service:
+  enabled: true
+  type: ClusterIP
+
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+
+persistence:
+  enabled: false
+
+configMap:
+  enabled: false
+
+secret:
+  enabled: false
+
+ingress:
+  enabled: false
+
+probes:
+  startup:
+    enabled: true
+    path: /v1/sys/health
+    port: 8200
+
+  readiness:
+    enabled: true
+    path: /v1/sys/health
+    port: 8200
+
+  liveness:
+    enabled: true
+    path: /v1/sys/health
+    port: 8200
