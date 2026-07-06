@@ -50,6 +50,12 @@ ingress:
   enabled: true
   host: vault.local
 
+  paths:
+    - path: /
+      pathType: Prefix
+      serviceName: frontend
+      servicePort: 80
+
 probes:
   startup:
     enabled: true
