@@ -1,3 +1,26 @@
+{{- if or .Values.configMap.enabled (include "platform.config.enabled" .) }}
+
+###############################################################################
+# Platform ConfigMap
+###############################################################################
+
+{{- if (include "platform.config.enabled" .) }}
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: platform-config
+  namespace: {{ .Values.namespace }}
+
+data:
+{{ include "platform.config.data" . | indent 2 }}
+---
+{{- end }}
+
+###############################################################################
+# Application ConfigMap
+###############################################################################
+
 {{- if .Values.configMap.enabled }}
 apiVersion: v1
 kind: ConfigMap
@@ -9,6 +32,7 @@ metadata:
 data:
 {{- range .Values.configMap.data }}
   {{ .name }}: {{ .value | quote }}
+{{- end }}
 {{- end }}
 
 {{- end }}

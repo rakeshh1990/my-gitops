@@ -27,16 +27,12 @@ Platform ConfigMap data
 {{- define "platform.config.data" -}}
 
 {{- if .Values.platform.postgres.enabled }}
-- name: POSTGRES_HOST
-  value: {{ .Values.platformDefaults.postgres.host | quote }}
-
-- name: POSTGRES_PORT
-  value: {{ .Values.platformDefaults.postgres.port | quote }}
+POSTGRES_HOST: {{ .Values.platformDefaults.postgres.host | quote }}
+POSTGRES_PORT: {{ .Values.platformDefaults.postgres.port | quote }}
 {{- end }}
 
 {{- if .Values.platform.redpanda.enabled }}
-- name: REDPANDA_BROKERS
-  value: {{ .Values.platformDefaults.redpanda.brokers | quote }}
+REDPANDA_BROKERS: {{ .Values.platformDefaults.redpanda.brokers | quote }}
 {{- end }}
 
 {{- end }}
@@ -50,11 +46,8 @@ Platform Secret data
 {{- define "platform.secret.data" -}}
 
 {{- if .Values.platform.postgres.enabled }}
-- name: POSTGRES_USER
-  value: {{ .Values.platformDefaults.postgres.username | quote }}
-
-- name: POSTGRES_PASSWORD
-  value: {{ .Values.platformDefaults.postgres.password | quote }}
+POSTGRES_USER: {{ .Values.platformDefaults.postgres.username | quote }}
+POSTGRES_PASSWORD: {{ .Values.platformDefaults.postgres.password | quote }}
 {{- end }}
 
 {{- end }}

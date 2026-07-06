@@ -57,6 +57,17 @@ spec:
 {{- end }}
 
         envFrom:
+
+{{- if (include "platform.secret.enabled" .) }}
+        - secretRef:
+            name: platform-secret
+{{- end }}
+
+{{- if (include "platform.config.enabled" .) }}
+        - configMapRef:
+            name: platform-config
+{{- end }}
+
 {{- if .Values.secret.enabled }}
         - secretRef:
             name: {{ .Values.workload.name }}
