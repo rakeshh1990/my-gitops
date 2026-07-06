@@ -26,14 +26,6 @@ ingress:
 configMap:
   enabled: true
   data:
-    - name: POSTGRES_HOST
-      value: postgres.platform.svc.cluster.local
-    - name: POSTGRES_PORT
-      value: "5432"
-    - name: POSTGRES_USER
-      value: stock
-    - name: POSTGRES_PASSWORD
-      value: stockpass
     - name: DB_NAME
       value: authdb
     - name: JWT_ALG
@@ -62,3 +54,18 @@ probes:
       port: 8000
     initialDelaySeconds: 30
     periodSeconds: 30
+platform:
+
+  postgres:
+    enabled: true
+
+  redpanda:
+    enabled: false
+
+  observability:
+    enabled: false
+    language: ""
+
+  ai:
+    enabled: false
+
