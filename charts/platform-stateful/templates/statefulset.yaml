@@ -103,6 +103,17 @@ spec:
         - name: {{ .Values.persistence.name | default "data" }}
           mountPath: {{ .Values.persistence.mountPath }}
 {{- end }}
+
+{{- if .Values.extraVolumeMounts }}
+{{ toYaml .Values.extraVolumeMounts | nindent 8 }}
+{{- end }}
+
+{{- if .Values.extraVolumes }}
+
+      volumes:
+{{ toYaml .Values.extraVolumes | nindent 8 }}
+
+{{- end }}
 {{- if .Values.persistence.enabled }}
 
   volumeClaimTemplates:

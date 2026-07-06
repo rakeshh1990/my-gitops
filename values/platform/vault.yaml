@@ -16,9 +16,7 @@ workload:
 
   args:
     - server
-    - -dev
-    - -dev-root-token-id=root
-    - -dev-listen-address=0.0.0.0:8200
+    - -config=/vault/config/vault.hcl
 
   resources:
     requests:
@@ -38,7 +36,10 @@ service:
       targetPort: 8200
 
 persistence:
-  enabled: false
+  enabled: true
+  size: 10Gi
+  storageClass: standard
+  mountPath: /vault/file
 
 configMap:
   enabled: false
@@ -66,3 +67,34 @@ probes:
     enabled: true
     path: /v1/sys/health
     port: 8200
+
+extraConfigMaps:
+  enabled: true
+
+  items:
+    - name: vault-config
+
+      files:
+
+        vault.hcl: |
+          ui = true
+
+          listener "tcp" {
+            address = "0.0.0.0:8200"
+            tls_disable = 1
+          }
+
+          storage "file" {
+            path = "/vault/file"
+          }
+
+          disable_mlock = true
+
+extraVolumes:
+  - name: vault-config
+    configMap:
+      name: vault-config
+
+extraVolumeMounts:
+  - name: vault-config
+    mountPath: /vault/config

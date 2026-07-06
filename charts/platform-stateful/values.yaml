@@ -70,3 +70,8 @@ probes:
 
   liveness:
     enabled: false
+
+extraConfigMaps:
+  enabled: false
+
+  items: []
