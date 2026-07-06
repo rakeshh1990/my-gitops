@@ -49,12 +49,7 @@ secret:
 ingress:
   enabled: true
   host: vault.local
-
-  paths:
-    - path: /
-      pathType: Prefix
-      serviceName: vault
-      servicePort: 8200
+  servicePort: 8200
 
 probes:
   startup:
