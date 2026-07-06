@@ -1,0 +1,53 @@
+namespace: default
+
+workload:
+  name: example-job
+
+  image:
+    repository: busybox
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  command: []
+
+  args: []
+
+  resources: {}
+
+serviceAccount:
+  create: false
+  name: ""
+
+restartPolicy: Never
+
+backoffLimit: 3
+
+ttlSecondsAfterFinished: 300
+
+configMap:
+  enabled: false
+  data: []
+
+secret:
+  enabled: false
+  data: []
+
+extraConfigMaps:
+  enabled: false
+  items: []
+
+extraVolumes: []
+
+extraVolumeMounts: []
+
+imagePullSecrets: []
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+hook:
+  type: ""
+  deletePolicy: ""
