@@ -20,19 +20,25 @@ Future:
 
 {{/*
 ===============================================================================
-Platform ConfigMap data
+Platform Environment Variables
+
+Inject non-sensitive platform configuration directly into the Pod.
 ===============================================================================
 */}}
 
-{{- define "platform.config.data" -}}
+{{- define "platform.env" -}}
 
 {{- if .Values.platform.postgres.enabled }}
-POSTGRES_HOST: {{ .Values.platformDefaults.postgres.host | quote }}
-POSTGRES_PORT: {{ .Values.platformDefaults.postgres.port | quote }}
+- name: POSTGRES_HOST
+  value: {{ .Values.platformDefaults.postgres.host | quote }}
+
+- name: POSTGRES_PORT
+  value: {{ .Values.platformDefaults.postgres.port | quote }}
 {{- end }}
 
 {{- if .Values.platform.redpanda.enabled }}
-REDPANDA_BROKERS: {{ .Values.platformDefaults.redpanda.brokers | quote }}
+- name: KAFKA_BROKER
+  value: {{ .Values.platformDefaults.redpanda.brokers | quote }}
 {{- end }}
 
 {{- end }}

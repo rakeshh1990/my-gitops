@@ -63,9 +63,11 @@ spec:
             name: platform-secret
 {{- end }}
 
-{{- if (include "platform.config.enabled" .) }}
-        - configMapRef:
-            name: platform-config
+{{- $platformEnv := include "platform.env" . }}
+
+{{- if $platformEnv }}
+        env:
+{{ $platformEnv | nindent 8 }}
 {{- end }}
 
 {{- if .Values.secret.enabled }}
