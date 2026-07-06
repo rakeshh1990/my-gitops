@@ -108,3 +108,38 @@ platform:
 
   ai:
     enabled: false
+
+
+###############################################################################
+# Platform Capability Contract
+###############################################################################
+
+platform:
+
+  postgres:
+    enabled: false
+
+  redpanda:
+    enabled: false
+
+  observability:
+    enabled: false
+    language: ""
+
+  ai:
+    enabled: false
+
+###############################################################################
+# Platform Defaults
+###############################################################################
+
+platformDefaults:
+
+  postgres:
+    host: postgres.platform.svc.cluster.local
+    port: "5432"
+    username: stock
+    password: stockpass
+
+  redpanda:
+    brokers: redpanda.platform.svc.cluster.local:9092
