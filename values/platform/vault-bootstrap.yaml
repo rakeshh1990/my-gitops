@@ -1,0 +1,44 @@
+namespace: platform
+
+workload:
+  name: vault-bootstrap
+
+  image:
+    repository: hashicorp/vault
+    tag: "1.20.3"
+    pullPolicy: IfNotPresent
+
+  command:
+    - sh
+    - -c
+
+  args:
+    - |
+      export VAULT_ADDR=http://vault.platform.svc.cluster.local:8200
+      export VAULT_TOKEN=$(cat /var/run/secrets/vault/token)
+
+      echo "=== Vault Status ==="
+      vault status
+
+restartPolicy: Never
+
+backoffLimit: 3
+
+ttlSecondsAfterFinished: 300
+
+serviceAccount:
+  create: false
+
+extraVolumes:
+  - name: vault-token
+    secret:
+      secretName: vault-root-token
+
+extraVolumeMounts:
+  - name: vault-token
+    mountPath: /var/run/secrets/vault
+    readOnly: true
+
+hook:
+  type: ""
+  deletePolicy: ""

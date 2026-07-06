@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: vault-bootstrap
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/rakeshh1990/my-gitops.git
+    targetRevision: main
+
+    path: charts/platform-job
+
+    helm:
+      valueFiles:
+        - ../../values/platform/vault-bootstrap.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: platform
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

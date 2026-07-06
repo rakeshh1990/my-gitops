@@ -7,47 +7,18 @@ metadata:
 {{- if .Values.hook.type }}
   annotations:
     argocd.argoproj.io/hook: {{ .Values.hook.type | quote }}
-
 {{- if .Values.hook.deletePolicy }}
     argocd.argoproj.io/hook-delete-policy: {{ .Values.hook.deletePolicy | quote }}
 {{- end }}
-
 {{- end }}
 
 spec:
-
   backoffLimit: {{ .Values.backoffLimit }}
-
   ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
 
   template:
-
     spec:
-
       restartPolicy: {{ .Values.restartPolicy }}
-
-      containers:
-
-      - name: {{ .Values.workload.name }}
-
-        image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
-{{- if .Values.imagePullSecrets }}
-
-      imagePullSecrets:
-
-{{ toYaml .Values.imagePullSecrets | nindent 6 }}
-
-{{- end }}
-
-{{- if .Values.workload.command }}
-        command:
-{{ toYaml .Values.workload.command | nindent 10 }}
-{{- end }}
-
-{{- if .Values.workload.args }}
-        args:
-{{ toYaml .Values.workload.args | nindent 10 }}
-{{- end }}
 
 {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ default .Values.workload.name .Values.serviceAccount.name }}
@@ -55,66 +26,68 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
 {{- end }}
 
-{{- if .Values.workload.resources }}
-
-        resources:
-{{ toYaml .Values.workload.resources | nindent 10 }}
-
-{{- end }}
-
-        envFrom:
-
-{{- if .Values.secret.enabled }}
-        - secretRef:
-            name: {{ .Values.workload.name }}
-{{- end }}
-
-{{- if .Values.configMap.enabled }}
-        - configMapRef:
-            name: {{ .Values.workload.name }}
-{{- end }}
-
-{{- range .Values.extraConfigMaps.items }}
-        - configMapRef:
-            name: {{ . }}
+{{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | nindent 8 }}
 {{- end }}
 
 {{- if .Values.nodeSelector }}
-
       nodeSelector:
-
 {{ toYaml .Values.nodeSelector | nindent 8 }}
-
 {{- end }}
 
 {{- if .Values.affinity }}
-
       affinity:
-
 {{ toYaml .Values.affinity | nindent 8 }}
-
 {{- end }}
 
 {{- if .Values.tolerations }}
-
       tolerations:
-
 {{ toYaml .Values.tolerations | nindent 8 }}
-
 {{- end }}
 
 {{- if .Values.extraVolumes }}
-
       volumes:
-
 {{ toYaml .Values.extraVolumes | nindent 8 }}
+{{- end }}
 
+      containers:
+        - name: {{ .Values.workload.name }}
+          image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
+          imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
+
+{{- if .Values.workload.command }}
+          command:
+{{ toYaml .Values.workload.command | nindent 12 }}
+{{- end }}
+
+{{- if .Values.workload.args }}
+          args:
+{{ toYaml .Values.workload.args | nindent 12 }}
+{{- end }}
+
+{{- if or .Values.secret.enabled .Values.configMap.enabled .Values.extraConfigMaps.items }}
+          envFrom:
+{{- if .Values.secret.enabled }}
+            - secretRef:
+                name: {{ .Values.workload.name }}
+{{- end }}
+{{- if .Values.configMap.enabled }}
+            - configMapRef:
+                name: {{ .Values.workload.name }}
+{{- end }}
+{{- range .Values.extraConfigMaps.items }}
+            - configMapRef:
+                name: {{ . }}
+{{- end }}
 {{- end }}
 
 {{- if .Values.extraVolumeMounts }}
+          volumeMounts:
+{{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+{{- end }}
 
-        volumeMounts:
-
-{{ toYaml .Values.extraVolumeMounts | nindent 10 }}
-
+{{- if .Values.workload.resources }}
+          resources:
+{{ toYaml .Values.workload.resources | nindent 12 }}
 {{- end }}
