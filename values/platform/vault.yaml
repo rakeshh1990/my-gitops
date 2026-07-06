@@ -47,7 +47,8 @@ secret:
   enabled: false
 
 ingress:
-  enabled: false
+  enabled: true
+  host: vault.local
 
 probes:
   startup:
