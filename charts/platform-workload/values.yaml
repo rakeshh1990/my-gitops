@@ -92,3 +92,19 @@ affinity: {}
 
 
 tolerations: []
+
+
+platform:
+
+  postgres:
+    enabled: false
+
+  redpanda:
+    enabled: false
+
+  observability:
+    enabled: false
+    language: ""
+
+  ai:
+    enabled: false
