@@ -53,8 +53,8 @@ ingress:
   paths:
     - path: /
       pathType: Prefix
-      serviceName: frontend
-      servicePort: 80
+      serviceName: vault
+      servicePort: 8200
 
 probes:
   startup:
