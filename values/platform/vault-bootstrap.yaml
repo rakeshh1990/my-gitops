@@ -115,6 +115,16 @@ extraConfigMaps:
 
           echo "Policy configured."
 
+          echo "=== Create stock-alert role ==="
+
+          vault write auth/kubernetes/role/stock-alert \
+              bound_service_account_names=external-secrets \
+              bound_service_account_namespaces=external-secrets \
+              policies=stock-alert \
+              ttl=24h
+
+          echo "Role configured."
+
           echo "Done."
 
 extraVolumes:
