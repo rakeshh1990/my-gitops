@@ -63,13 +63,6 @@ spec:
             name: platform-secret
 {{- end }}
 
-{{- $platformEnv := include "platform.env" . }}
-
-{{- if $platformEnv }}
-        env:
-{{ $platformEnv | nindent 8 }}
-{{- end }}
-
 {{- if .Values.secret.enabled }}
         - secretRef:
             name: {{ .Values.workload.name }}
@@ -78,6 +71,13 @@ spec:
 {{- if .Values.configMap.enabled }}
         - configMapRef:
             name: {{ .Values.workload.name }}
+{{- end }}
+
+{{- $platformEnv := include "platform.env" . }}
+
+{{- if $platformEnv }}
+        env:
+{{- $platformEnv | nindent 8 }}
 {{- end }}
 
 {{- if .Values.workload.resources }}
