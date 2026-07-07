@@ -66,7 +66,7 @@ spec:
 {{ toYaml .Values.workload.args | nindent 12 }}
 {{- end }}
 
-{{- if or .Values.secret.enabled .Values.configMap.enabled .Values.extraConfigMaps.items }}
+{{- if or .Values.secret.enabled .Values.configMap.enabled }}
           envFrom:
 {{- if .Values.secret.enabled }}
             - secretRef:
@@ -75,10 +75,6 @@ spec:
 {{- if .Values.configMap.enabled }}
             - configMapRef:
                 name: {{ .Values.workload.name }}
-{{- end }}
-{{- range .Values.extraConfigMaps.items }}
-            - configMapRef:
-                name: {{ . }}
 {{- end }}
 {{- end }}
 

@@ -1,0 +1,20 @@
+{{- if .Values.extraConfigMaps.enabled }}
+
+{{- range .Values.extraConfigMaps.items }}
+---
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace }}
+
+data:
+{{- range $filename, $content := .files }}
+  {{ $filename }}: |
+{{ $content | nindent 4 }}
+{{- end }}
+
+{{- end }}
+
+{{- end }}

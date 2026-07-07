@@ -10,15 +10,9 @@ workload:
 
   command:
     - sh
-    - -c
 
   args:
-    - |
-      export VAULT_ADDR=http://vault.platform.svc.cluster.local:8200
-      export VAULT_TOKEN=$(cat /var/run/secrets/vault/token)
-
-      echo "=== Vault Status ==="
-      vault status
+    - /bootstrap/bootstrap.sh
 
 restartPolicy: Never
 
@@ -29,12 +23,66 @@ ttlSecondsAfterFinished: 300
 serviceAccount:
   create: false
 
+extraConfigMaps:
+  enabled: true
+
+  items:
+    - name: vault-bootstrap
+
+      files:
+        bootstrap.sh: |
+          #!/bin/sh
+
+          set -e
+
+          export VAULT_ADDR=http://vault.platform.svc.cluster.local:8200
+          export VAULT_TOKEN=$(cat /var/run/secrets/vault/token)
+
+          echo "Waiting for Vault..."
+
+          while true; do
+
+              STATUS=$(vault status -format=json 2>/dev/null || true)
+
+              INITIALIZED=$(echo "$STATUS" | grep -o '"initialized":[^,]*' | cut -d: -f2)
+              SEALED=$(echo "$STATUS" | grep -o '"sealed":[^,]*' | cut -d: -f2)
+
+              if [ "$INITIALIZED" != "true" ]; then
+                  echo "Vault is not initialized."
+                  exit 0
+              fi
+
+              if [ "$SEALED" = "true" ]; then
+                  echo "Vault is sealed. Waiting..."
+                  sleep 5
+                  continue
+              fi
+
+              break
+          done
+
+          echo "Vault is ready."
+
+          echo "=== Enable KV v2 ==="
+
+          vault secrets list | grep "^applications/" >/dev/null 2>&1 || \
+          vault secrets enable -path=applications kv-v2
+
+          echo "Done."
+
 extraVolumes:
+  - name: bootstrap
+    configMap:
+      name: vault-bootstrap
+      defaultMode: 0755
   - name: vault-token
     secret:
       secretName: vault-root-token
 
 extraVolumeMounts:
+  - name: bootstrap
+    mountPath: /bootstrap
+    readOnly: true
   - name: vault-token
     mountPath: /var/run/secrets/vault
     readOnly: true
