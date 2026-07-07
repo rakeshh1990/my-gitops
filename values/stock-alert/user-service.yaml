@@ -22,11 +22,6 @@ configMap:
       value: change-this-in-production
 secret:
   enabled: false
-  data:
-    - name: POSTGRES_USER
-      value: stock
-    - name: POSTGRES_PASSWORD
-      value: stockpass
 ingress:
   enabled: false
 probes:

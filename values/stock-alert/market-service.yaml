@@ -20,11 +20,6 @@ configMap:
       value: market_db
 secret:
   enabled: false
-  data:
-    - name: POSTGRES_USER
-      value: stock
-    - name: POSTGRES_PASSWORD
-      value: stockpass
 ingress:
   enabled: false
 probes:

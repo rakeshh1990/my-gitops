@@ -22,8 +22,6 @@ configMap:
       value: http://user-service:8002
     - name: MARKET_SERVICE_URL
       value: http://market-service:8006
-    - name: KAFKA_BROKER
-      value: redpanda.platform.svc.cluster.local:9092
     - name: KAFKA_ALERT_TOPIC
       value: alert.triggered
     - name: INTERNAL_API_KEY
@@ -40,11 +38,6 @@ configMap:
       value: Asia/Kolkata
 secret:
   enabled: false
-  data:
-    - name: POSTGRES_USER
-      value: stock
-    - name: POSTGRES_PASSWORD
-      value: stockpass
 ingress:
   enabled: false
 probes:
