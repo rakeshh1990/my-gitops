@@ -1,20 +1,21 @@
 {{/*
 ===============================================================================
-Platform Injection Engine
+Platform Capability Engine
 
-This file contains helper templates used to build platform-owned resources.
+This file provides helper templates used by workloads to
+inject platform capabilities.
 
-It DOES NOT create Kubernetes resources.
+Current capabilities:
+- PostgreSQL
+- Redpanda
 
-Platform-owned resources:
-- platform-config
-- platform-secret
+Platform secrets are provided by External Secrets.
+Platform constants are injected directly as environment variables.
 
-Future:
-- annotations
-- volumes
-- volumeMounts
-- serviceAccount
+Future capabilities:
+- Observability
+- AI
+- Redis
 ===============================================================================
 */}}
 
@@ -45,41 +46,7 @@ Inject non-sensitive platform configuration directly into the Pod.
 
 {{/*
 ===============================================================================
-Platform Secret data
-===============================================================================
-*/}}
-
-{{- define "platform.secret.data" -}}
-
-{{- if .Values.platform.postgres.enabled }}
-POSTGRES_USER: {{ .Values.platformDefaults.postgres.username | quote }}
-POSTGRES_PASSWORD: {{ .Values.platformDefaults.postgres.password | quote }}
-{{- end }}
-
-{{- end }}
-
-{{/*
-===============================================================================
-Should platform ConfigMap be created?
-===============================================================================
-*/}}
-
-{{- define "platform.config.enabled" -}}
-
-{{- if or
-      .Values.platform.postgres.enabled
-      .Values.platform.redpanda.enabled
-}}
-
-true
-
-{{- end }}
-
-{{- end }}
-
-{{/*
-===============================================================================
-Should platform Secret be created?
+Should platform Secret be injected?
 ===============================================================================
 */}}
 
