@@ -44,9 +44,12 @@ extraConfigMaps:
 
               STATUS=$(vault status -format=json 2>/dev/null || true)
 
-              INITIALIZED=$(echo "$STATUS" | grep -o '"initialized":[^,]*' | cut -d: -f2)
-              SEALED=$(echo "$STATUS" | grep -o '"sealed":[^,]*' | cut -d: -f2)
+              INITIALIZED=$(echo "$STATUS" | grep -o '"initialized":[[:space:]]*:[[:space:]]*[^,]*' | cut -d: -f2 | xargs)
+              SEALED=$(echo "$STATUS" | grep -o '"sealed":[[:space:]]*:[[:space:]]*[^,]*' | cut -d: -f2 | xargs)
 
+              echo "INITIALIZED=$INITIALIZED"
+              echo "SEALED=$SEALED"
+              
               if [ "$INITIALIZED" != "true" ]; then
                   echo "Vault is not initialized."
                   exit 0
