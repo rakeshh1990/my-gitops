@@ -16,14 +16,10 @@ workload:
 configMap:
   enabled: true
   data:
-    - name: POSTGRES_HOST
-      value: postgres.platform.svc.cluster.local
-    - name: POSTGRES_PORT
-      value: "5432"
     - name: DB_NAME
       value: market_db
 secret:
-  enabled: true
+  enabled: false
   data:
     - name: POSTGRES_USER
       value: stock
@@ -51,3 +47,16 @@ resources:
   limits:
     cpu: "1"
     memory: 1Gi
+platform:
+  postgres:
+    enabled: true
+
+  redpanda:
+    enabled: false
+
+  observability:
+    enabled: false
+    language: ""
+
+  ai:
+    enabled: false
