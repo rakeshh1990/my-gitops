@@ -120,7 +120,7 @@ extraConfigMaps:
           vault write auth/kubernetes/role/stock-alert \
               bound_service_account_names=external-secrets \
               bound_service_account_namespaces=external-secrets \
-              audience="vault" \
+              audience="https://kubernetes.default.svc" \
               policies=stock-alert \
               ttl=24h
 
