@@ -17,6 +17,9 @@ spec:
   ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
 
   template:
+    metadata:
+      labels:
+        app: {{ .Values.workload.name }}
     spec:
       restartPolicy: {{ .Values.restartPolicy }}
 
