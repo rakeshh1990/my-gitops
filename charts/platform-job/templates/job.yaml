@@ -21,6 +21,9 @@ spec:
       labels:
         app: {{ .Values.workload.name }}
     spec:
+{{- with .Values.serviceAccount.name }}
+      serviceAccountName: {{ . }}
+{{- end }}
       restartPolicy: {{ .Values.restartPolicy }}
 
 {{- if .Values.serviceAccount.create }}
