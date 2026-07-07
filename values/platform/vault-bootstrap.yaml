@@ -99,6 +99,22 @@ extraConfigMaps:
 
           echo "Kubernetes auth configured."
 
+          echo "=== Create stock-alert policy ==="
+
+          cat >/tmp/stock-alert-policy.hcl <<EOF
+          path "applications/data/stock-alert/*" {
+            capabilities = ["create", "read", "update", "delete", "list"]
+          }
+
+          path "applications/metadata/stock-alert/*" {
+            capabilities = ["list", "read"]
+          }
+          EOF
+
+          vault policy write stock-alert /tmp/stock-alert-policy.hcl
+
+          echo "Policy configured."
+
           echo "Done."
 
 extraVolumes:
