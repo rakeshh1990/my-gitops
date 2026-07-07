@@ -52,8 +52,8 @@ extraConfigMaps:
 
               echo "$STATUS"
 
-              INITIALIZED=$(echo "$STATUS" | grep -o '"initialized":[[:space:]]*:[[:space:]]*[^,]*' | cut -d: -f2 | xargs)
-              SEALED=$(echo "$STATUS" | grep -o '"sealed":[[:space:]]*:[[:space:]]*[^,]*' | cut -d: -f2 | xargs)
+              INITIALIZED=$(vault status -format=json | grep '"initialized"' | awk '{print $2}' | tr -d ',')
+              SEALED=$(vault status -format=json | grep '"sealed"' | awk '{print $2}' | tr -d ',')
 
               echo "INITIALIZED=$INITIALIZED"
               echo "SEALED=$SEALED"
