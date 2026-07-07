@@ -16,10 +16,6 @@ workload:
 configMap:
   enabled: true
   data:
-    - name: POSTGRES_HOST
-      value: postgres.platform.svc.cluster.local
-    - name: POSTGRES_PORT
-      value: "5432"
     - name: DB_NAME
       value: scanner_db
     - name: USER_SERVICE_URL
@@ -43,7 +39,7 @@ configMap:
     - name: SCAN_SCHEDULE_TIMEZONE
       value: Asia/Kolkata
 secret:
-  enabled: true
+  enabled: false
   data:
     - name: POSTGRES_USER
       value: stock
@@ -71,3 +67,16 @@ resources:
   limits:
     cpu: "1"
     memory: 1Gi
+platform:
+  postgres:
+    enabled: true
+
+  redpanda:
+    enabled: true
+
+  observability:
+    enabled: false
+    language: ""
+
+  ai:
+    enabled: false
