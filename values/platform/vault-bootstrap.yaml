@@ -22,6 +22,7 @@ ttlSecondsAfterFinished: 300
 
 serviceAccount:
   create: false
+  name: vault-bootstrap
 
 extraConfigMaps:
   enabled: true
@@ -40,36 +41,29 @@ extraConfigMaps:
 
           echo "Waiting for Vault..."
 
+          until vault status >/dev/null 2>&1; do
+            sleep 2
+          done
+
           while true; do
 
-              echo "VAULT_ADDR=$VAULT_ADDR"
+            STATUS=$(vault status -format=json)
 
-              vault status
+            INITIALIZED=$(echo "$STATUS" | grep '"initialized"' | awk '{print $2}' | tr -d ',')
+            SEALED=$(echo "$STATUS" | grep '"sealed"' | awk '{print $2}' | tr -d ',')
 
-              echo "------ JSON ------"
+            if [ "$INITIALIZED" != "true" ]; then
+              echo "Vault is not initialized."
+              exit 0
+            fi
 
-              STATUS=$(vault status -format=json)
+            if [ "$SEALED" = "true" ]; then
+              echo "Vault is sealed. Waiting..."
+              sleep 5
+              continue
+            fi
 
-              echo "$STATUS"
-
-              INITIALIZED=$(vault status -format=json | grep '"initialized"' | awk '{print $2}' | tr -d ',')
-              SEALED=$(vault status -format=json | grep '"sealed"' | awk '{print $2}' | tr -d ',')
-
-              echo "INITIALIZED=$INITIALIZED"
-              echo "SEALED=$SEALED"
-
-              if [ "$INITIALIZED" != "true" ]; then
-                  echo "Vault is not initialized."
-                  exit 0
-              fi
-
-              if [ "$SEALED" = "true" ]; then
-                  echo "Vault is sealed. Waiting..."
-                  sleep 5
-                  continue
-              fi
-
-              break
+            break
           done
 
           echo "Vault is ready."
@@ -79,27 +73,20 @@ extraConfigMaps:
           vault secrets list | grep "^applications/" >/dev/null 2>&1 || \
           vault secrets enable -path=applications kv-v2
 
-          echo "=== Enable Kubernetes Auth ==="
+          echo "=== Reset Kubernetes Auth ==="
 
-          vault auth list | grep "^kubernetes/" >/dev/null 2>&1 || \
+          vault auth disable kubernetes >/dev/null 2>&1 || true
           vault auth enable kubernetes
 
           echo "=== Configure Kubernetes Auth ==="
 
-          KUBE_HOST="https://kubernetes.default.svc"
-
-          SA_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-
-          CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-
           vault write auth/kubernetes/config \
-              kubernetes_host="$KUBE_HOST" \
-              token_reviewer_jwt="$SA_TOKEN" \
-              kubernetes_ca_cert=@"$CA_CERT"
+            kubernetes_host="https://kubernetes.default.svc.cluster.local" \
+            token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+            kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+            disable_iss_validation=true
 
-          echo "Kubernetes auth configured."
-
-          echo "=== Create stock-alert policy ==="
+          echo "=== Create Policy ==="
 
           cat >/tmp/stock-alert-policy.hcl <<EOF
           path "applications/data/stock-alert/*" {
@@ -113,26 +100,22 @@ extraConfigMaps:
 
           vault policy write stock-alert /tmp/stock-alert-policy.hcl
 
-          echo "Policy configured."
-
-          echo "=== Create stock-alert role ==="
+          echo "=== Create Role ==="
 
           vault write auth/kubernetes/role/stock-alert \
-              bound_service_account_names=external-secrets \
-              bound_service_account_namespaces=external-secrets \
-              audience="https://kubernetes.default.svc.cluster.local" \
-              policies=stock-alert \
-              ttl=24h
+            bound_service_account_names=external-secrets \
+            bound_service_account_namespaces=external-secrets \
+            policies=stock-alert \
+            ttl=24h
 
-          echo "Role configured."
-
-          echo "Done."
+          echo "Bootstrap completed."
 
 extraVolumes:
   - name: bootstrap
     configMap:
       name: vault-bootstrap
       defaultMode: 0755
+
   - name: vault-token
     secret:
       secretName: vault-root-token
@@ -141,6 +124,7 @@ extraVolumeMounts:
   - name: bootstrap
     mountPath: /bootstrap
     readOnly: true
+
   - name: vault-token
     mountPath: /var/run/secrets/vault
     readOnly: true
