@@ -79,6 +79,26 @@ extraConfigMaps:
           vault secrets list | grep "^applications/" >/dev/null 2>&1 || \
           vault secrets enable -path=applications kv-v2
 
+          echo "=== Enable Kubernetes Auth ==="
+
+          vault auth list | grep "^kubernetes/" >/dev/null 2>&1 || \
+          vault auth enable kubernetes
+
+          echo "=== Configure Kubernetes Auth ==="
+
+          KUBE_HOST="https://kubernetes.default.svc"
+
+          SA_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+
+          CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+
+          vault write auth/kubernetes/config \
+              kubernetes_host="$KUBE_HOST" \
+              token_reviewer_jwt="$SA_TOKEN" \
+              kubernetes_ca_cert=@"$CA_CERT"
+
+          echo "Kubernetes auth configured."
+
           echo "Done."
 
 extraVolumes:
