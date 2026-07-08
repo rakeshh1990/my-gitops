@@ -1,0 +1,7 @@
+alloy:
+  alloy:
+    configMap:
+      content: |
+        logging {
+          level = "info"
+        }
