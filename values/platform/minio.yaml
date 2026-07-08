@@ -1,0 +1,18 @@
+minio:
+  mode: standalone
+
+  rootUser: admin
+  rootPassword: changeme
+
+  persistence:
+    enabled: true
+    size: 20Gi
+
+  buckets:
+    - name: loki
+      policy: none
+      purge: false
+
+    - name: tempo
+      policy: none
+      purge: false
