@@ -9,14 +9,22 @@ minio:
     size: 20Gi
 
   buckets:
-    - name: loki
+    - name: loki-chunks
+      policy: none
+      purge: false
+
+    - name: loki-ruler
+      policy: none
+      purge: false
+
+    - name: loki-admin
       policy: none
       purge: false
 
     - name: tempo
       policy: none
       purge: false
-      
+
   resources:
     requests:
       memory: 256Mi
