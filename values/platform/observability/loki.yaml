@@ -56,7 +56,7 @@ loki:
       s3:
         endpoint: minio.platform.svc.cluster.local:9000
         accessKeyId: admin
-        secretAccessKey: password
+        secretAccessKey: changeme
         s3ForcePathStyle: true
         insecure: true
 
