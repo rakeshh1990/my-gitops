@@ -1,0 +1,33 @@
+grafana:
+  replicas: 1
+
+  adminUser: admin
+  adminPassword: admin
+
+  persistence:
+    enabled: true
+    size: 10Gi
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+
+    hosts:
+      - grafana.local
+
+    path: /
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+
+      datasources:
+        - name: Loki
+          uid: loki
+          type: loki
+          access: proxy
+          url: http://loki-gateway.observability.svc.cluster.local
+          isDefault: true
