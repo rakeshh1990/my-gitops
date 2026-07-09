@@ -54,7 +54,7 @@ loki:
         admin: loki-admin
 
       s3:
-        endpoint: minio.observability.svc.cluster.local:9000
+        endpoint: minio.platform.svc.cluster.local:9000
         accessKeyId: admin
         secretAccessKey: password
         s3ForcePathStyle: true
