@@ -1,28 +1,54 @@
 loki:
-  deploymentMode: SingleBinary
+  deploymentMode: Monolithic
 
   singleBinary:
+    enabled: true
     replicas: 1
 
-  backend:
-    replicas: 0
-
   read:
-    replicas: 0
+    enabled: false
 
   write:
-    replicas: 0
+    enabled: false
 
-  loki:
-    useTestSchema: true
+  backend:
+    enabled: false
 
-    commonConfig:
-      replication_factor: 1
+  gateway:
+    enabled: false
 
-    storage:
-      type: filesystem
+  lokiCanary:
+    enabled: false
 
-      bucketNames:
-        chunks: chunks
-        ruler: ruler
-        admin: admin
+  chunksCache:
+    enabled: false
+
+  resultsCache:
+    enabled: false
+
+  ruler:
+    enabled: false
+
+  test:
+    enabled: false
+
+  storage:
+    type: filesystem
+
+    bucketNames:
+      chunks: filesystem
+      ruler: filesystem
+      admin: filesystem
+
+  commonConfig:
+    replication_factor: 1
+
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
