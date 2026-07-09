@@ -1,59 +1,58 @@
 alloy:
+  controller:
+    type: deployment
+    replicas: 1
+
+  rbac:
+    create: true
+
+  serviceAccount:
+    create: true
+
   alloy:
-    controller:
-      type: deployment
-      replicas: 1
-
-    rbac:
+    configMap:
       create: true
 
-    serviceAccount:
-      create: true
+      content: |
+        logging {
+          level = "info"
+        }
 
-    alloy:
-      configMap:
-        create: true
+        discovery.kubernetes "pods" {
+          role = "pod"
+        }
 
-        content: |
-          logging {
-            level = "info"
+        discovery.relabel "pods" {
+          targets = discovery.kubernetes.pods.targets
+
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            target_label  = "namespace"
           }
 
-          discovery.kubernetes "pods" {
-            role = "pod"
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            target_label  = "pod"
           }
 
-          discovery.relabel "pods" {
-            targets = discovery.kubernetes.pods.targets
-
-            rule {
-              source_labels = ["__meta_kubernetes_namespace"]
-              target_label  = "namespace"
-            }
-
-            rule {
-              source_labels = ["__meta_kubernetes_pod_name"]
-              target_label  = "pod"
-            }
-
-            rule {
-              source_labels = ["__meta_kubernetes_pod_container_name"]
-              target_label  = "container"
-            }
-
-            rule {
-              source_labels = ["__meta_kubernetes_pod_node_name"]
-              target_label  = "node"
-            }
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            target_label  = "container"
           }
 
-          loki.source.kubernetes "pods" {
-            targets    = discovery.relabel.pods.output
-            forward_to = [loki.write.default.receiver]
+          rule {
+            source_labels = ["__meta_kubernetes_pod_node_name"]
+            target_label  = "node"
           }
+        }
 
-          loki.write "default" {
-            endpoint {
-              url = "http://loki-gateway.observability.svc.cluster.local/loki/api/v1/push"
-            }
+        loki.source.kubernetes "pods" {
+          targets    = discovery.relabel.pods.output
+          forward_to = [loki.write.default.receiver]
+        }
+
+        loki.write "default" {
+          endpoint {
+            url = "http://loki-gateway.observability.svc.cluster.local/loki/api/v1/push"
           }
+        }
